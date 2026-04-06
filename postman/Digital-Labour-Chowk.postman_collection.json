@@ -1,7 +1,75 @@
 {
   "info": {
-    "name": "Digital-Labour-Chowk",
+    "_postman_id": "digital-labour-chowk",
+    "name": "Digital Labour Chowk API",
+    "description": "Complete REST API Test Collection",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": []
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:5000/api", "type": "string"},
+    {"key": "user_token", "value": "", "type": "string"},
+    {"key": "worker_token", "value": "", "type": "string"},
+    {"key": "user_id", "value": "", "type": "string"},
+    {"key": "worker_id", "value": "", "type": "string"},
+    {"key": "job_id", "value": "", "type": "string"}
+  ],
+  "item": [
+    {
+      "name": "USER AUTHENTICATION",
+      "item": [
+        {"name": "Register User", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"name\": \"John Employer\",\"email\": \"employer{{$timestamp}}@example.com\",\"phone\": \"1234567890\",\"password\": \"password123\"}"}, "url": {"raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"]}}},
+        {"name": "Login User", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"email\": \"employer@example.com\",\"password\": \"password123\"}"}, "url": {"raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"]}}},
+        {"name": "Get Current User", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"]}}},
+        {"name": "Update User Profile", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{user_token}}"}], "body": {"mode": "raw", "raw": "{\"name\": \"John Updated\",\"phone\": \"9876543210\"}"}, "url": {"raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"]}}}
+      ]
+    },
+    {
+      "name": "WORKER AUTHENTICATION",
+      "item": [
+        {"name": "Register Worker", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"name\": \"Jane Carpenter\",\"email\": \"worker{{$timestamp}}@example.com\",\"phone\": \"9876543210\",\"password\": \"password123\",\"skill\": \"Carpentry\",\"location\": \"New York\",\"experience\": 5}"}, "url": {"raw": "{{base_url}}/workers/register", "host": ["{{base_url}}"], "path": ["workers", "register"]}}},
+        {"name": "Login Worker", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"email\": \"worker@example.com\",\"password\": \"password123\"}"}, "url": {"raw": "{{base_url}}/workers/login", "host": ["{{base_url}}"], "path": ["workers", "login"]}}},
+        {"name": "Get All Workers", "request": {"method": "GET", "header": [], "url": {"raw": "{{base_url}}/workers", "host": ["{{base_url}}"], "path": ["workers"]}}},
+        {"name": "Get Worker by ID", "request": {"method": "GET", "header": [], "url": {"raw": "{{base_url}}/workers/{{worker_id}}", "host": ["{{base_url}}"], "path": ["workers", "{{worker_id}}"]}}},
+        {"name": "Update Worker Profile", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{worker_token}}"}], "body": {"mode": "raw", "raw": "{\"name\": \"Jane Advanced\",\"experience\": 7,\"skill\": \"Advanced Carpentry\"}"}, "url": {"raw": "{{base_url}}/workers/{{worker_id}}", "host": ["{{base_url}}"], "path": ["workers", "{{worker_id}}"]}}},
+        {"name": "Update Worker Availability", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{worker_token}}"}], "body": {"mode": "raw", "raw": "{\"availability\": false}"}, "url": {"raw": "{{base_url}}/workers/{{worker_id}}/availability", "host": ["{{base_url}}"], "path": ["workers", "{{worker_id}}", "availability"]}}}
+      ]
+    },
+    {
+      "name": "ADMIN OPERATIONS",
+      "item": [
+        {"name": "Get Pending Workers", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/workers/pending", "host": ["{{base_url}}"], "path": ["admin", "workers", "pending"]}}},
+        {"name": "Approve Worker", "request": {"method": "PUT", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/workers/{{worker_id}}/approve", "host": ["{{base_url}}"], "path": ["admin", "workers", "{{worker_id}}", "approve"]}}},
+        {"name": "Reject Worker", "request": {"method": "PUT", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/workers/{{worker_id}}/reject", "host": ["{{base_url}}"], "path": ["admin", "workers", "{{worker_id}}", "reject"]}}},
+        {"name": "Get Admin Statistics", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/stats", "host": ["{{base_url}}"], "path": ["admin", "stats"]}}},
+        {"name": "Get All Users", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/users", "host": ["{{base_url}}"], "path": ["admin", "users"]}}},
+        {"name": "Get All Workers", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/workers", "host": ["{{base_url}}"], "path": ["admin", "workers"]}}},
+        {"name": "Block User", "request": {"method": "PUT", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/users/{{user_id}}/block", "host": ["{{base_url}}"], "path": ["admin", "users", "{{user_id}}", "block"]}}},
+        {"name": "Unblock User", "request": {"method": "PUT", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/users/{{user_id}}/unblock", "host": ["{{base_url}}"], "path": ["admin", "users", "{{user_id}}", "unblock"]}}},
+        {"name": "Block Worker", "request": {"method": "PUT", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/admin/workers/{{worker_id}}/block", "host": ["{{base_url}}"], "path": ["admin", "workers", "{{worker_id}}", "block"]}}}
+      ]
+    },
+    {
+      "name": "JOB REQUESTS",
+      "item": [
+        {"name": "Create Job Request", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{user_token}}"}], "body": {"mode": "raw", "raw": "{\"title\": \"Build Wooden Deck\",\"description\": \"Need someone to build a 20x15 wooden deck with proper finishing\",\"location\": \"Brooklyn\",\"skill\": \"Carpentry\",\"wage\": 500,\"priority\": \"high\"}"}, "url": {"raw": "{{base_url}}/employers/requests", "host": ["{{base_url}}"], "path": ["employers", "requests"]}}},
+        {"name": "Get All Open Job Requests", "request": {"method": "GET", "header": [], "url": {"raw": "{{base_url}}/employers/requests/all/open", "host": ["{{base_url}}"], "path": ["employers", "requests", "all", "open"]}}},
+        {"name": "Get Employer's Job Requests", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/employers/requests", "host": ["{{base_url}}"], "path": ["employers", "requests"]}}},
+        {"name": "Get Job Request by ID", "request": {"method": "GET", "header": [], "url": {"raw": "{{base_url}}/employers/requests/{{job_id}}/view", "host": ["{{base_url}}"], "path": ["employers", "requests", "{{job_id}}", "view"]}}},
+        {"name": "Assign Worker to Job", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{user_token}}"}], "body": {"mode": "raw", "raw": "{\"workerId\": \"{{worker_id}}\"}"}, "url": {"raw": "{{base_url}}/employers/requests/{{job_id}}/assign", "host": ["{{base_url}}"], "path": ["employers", "requests", "{{job_id}}", "assign"]}}},
+        {"name": "Complete Job Request", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{user_token}}"}], "body": {"mode": "raw", "raw": "{\"rating\": 5,\"feedback\": \"Excellent work! Very professional and well done.\"}"}, "url": {"raw": "{{base_url}}/employers/requests/{{job_id}}/complete", "host": ["{{base_url}}"], "path": ["employers", "requests", "{{job_id}}", "complete"]}}},
+        {"name": "Delete Job Request", "request": {"method": "DELETE", "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}], "url": {"raw": "{{base_url}}/employers/requests/{{job_id}}", "host": ["{{base_url}}"], "path": ["employers", "requests", "{{job_id}}"]}}}
+      ]
+    },
+    {
+      "name": "ERROR CASES",
+      "item": [
+        {"name": "Invalid Email", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"name\": \"Test\",\"email\": \"invalid-email\",\"phone\": \"1111111111\",\"password\": \"password123\"}"}, "url": {"raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"]}}},
+        {"name": "Short Password", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"name\": \"Test\",\"email\": \"test@example.com\",\"phone\": \"1111111111\",\"password\": \"123\",\"skill\": \"Test\",\"location\": \"Test\"}"}, "url": {"raw": "{{base_url}}/workers/register", "host": ["{{base_url}}"], "path": ["workers", "register"]}}},
+        {"name": "Missing Auth Token", "request": {"method": "GET", "header": [], "url": {"raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"]}}},
+        {"name": "Invalid Token", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer invalid_token_here"}], "url": {"raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"]}}},
+        {"name": "Non-existent Worker", "request": {"method": "GET", "header": [], "url": {"raw": "{{base_url}}/workers/000000000000000000000000", "host": ["{{base_url}}"], "path": ["workers", "000000000000000000000000"]}}},
+        {"name": "Missing Required Fields", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{user_token}}"}], "body": {"mode": "raw", "raw": "{\"title\": \"Incomplete Job\"}"}, "url": {"raw": "{{base_url}}/employers/requests", "host": ["{{base_url}}"], "path": ["employers", "requests"]}}}
+      ]
+    }
+  ]
 }
